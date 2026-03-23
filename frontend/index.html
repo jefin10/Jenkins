@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Info</title>
+</head>
+<body>
+  <h1>Student Details</h1>
+  <p id="data"></p>
+
+  <script>
+    fetch("http://backend:5000/student-details")
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("data").innerHTML =
+          `Name: ${data.name} <br>
+           Roll: ${data.rollNumber} <br>
+           `;
+      });
+  </script>
+</body>
+</html>
