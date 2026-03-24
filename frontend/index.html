@@ -8,24 +8,36 @@
   <p id="data"></p>
 
   <script>
-    const apiUrl = "/student-details";
+    async function loadStudentDetails() {
+      const urls = [
+        `${window.location.origin}/student-details`,
+        `${window.location.protocol}//${window.location.hostname}:5000/student-details`
+      ];
 
-    fetch(apiUrl)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Request failed with status ${res.status}`);
+      let lastError = null;
+
+      for (const url of urls) {
+        try {
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) {
+            throw new Error(`Request failed with status ${res.status}`);
+          }
+
+          const data = await res.json();
+          document.getElementById("data").innerHTML =
+            `Name: ${data.name} <br>
+             Roll: ${data.rollNumber} <br>`;
+          return;
+        } catch (error) {
+          lastError = error;
         }
-        return res.json();
-      })
-      .then(data => {
-        document.getElementById("data").innerHTML =
-          `Name: ${data.name} <br>
-           Roll: ${data.rollNumber} <br>
-           `;
-      })
-      .catch((error) => {
-        document.getElementById("data").textContent = `Failed to load student details: ${error.message}`;
-      });
+      }
+
+      document.getElementById("data").textContent =
+        `Failed to load student details. ${lastError ? lastError.message : "Unknown error"}`;
+    }
+
+    loadStudentDetails();
   </script>
 </body>
 </html>
