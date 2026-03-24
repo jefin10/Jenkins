@@ -8,13 +8,23 @@
   <p id="data"></p>
 
   <script>
-    fetch("http://backend:5000/student-details")
-      .then(res => res.json())
+    const apiUrl = `${window.location.protocol}//${window.location.hostname}:5000/student-details`;
+
+    fetch(apiUrl)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Request failed with status ${res.status}`);
+        }
+        return res.json();
+      })
       .then(data => {
         document.getElementById("data").innerHTML =
           `Name: ${data.name} <br>
            Roll: ${data.rollNumber} <br>
            `;
+      })
+      .catch((error) => {
+        document.getElementById("data").textContent = `Failed to load student details: ${error.message}`;
       });
   </script>
 </body>
