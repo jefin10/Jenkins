@@ -7,7 +7,8 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const apiUrl = process.env.REACT_APP_API_URL || '/student-details';
+    // Use relative path so nginx proxy handles the request
+    const apiUrl = '/student-details';
     
     fetch(apiUrl)
       .then((res) => {
